@@ -1,97 +1,155 @@
 package sherly.jwork_android;
 
-import android.content.Context;
-import android.graphics.Typeface;
-import android.util.Log;
-import android.view.LayoutInflater;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class MainListAdapter extends BaseExpandableListAdapter {
-    private Context context;
-    private ArrayList<Recruiter> listDataHeader;
-    private HashMap<Recruiter, ArrayList<Job>> listDataChild;
+/**
+ * Class MainActivity, berfungsi untuk mengatur avtivity setelah proses login
+ * @author Sherly
+ * @version 28-06-2021
+ */
 
-    public MainListAdapter(Context context, ArrayList<Recruiter> listDataHeader, HashMap<Recruiter, ArrayList<Job>> listDataChild) {
-        this.context = context;
-        this.listDataHeader = listDataHeader;
-        this.listDataChild = listDataChild;
-    }
+public class MainActivity extends AppCompatActivity {
+    private ArrayList<Recruiter> listRecruiter = new ArrayList<>();
+    private ArrayList<Job> jobIdList = new ArrayList<>();
+    private HashMap<Recruiter, ArrayList<Job>> childMapping = new HashMap<>();
 
-    @Override
-    public int getGroupCount() {
-        return this.listDataHeader.size();
-    }
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    private static int jobSeekerId;
 
     @Override
-    public int getChildrenCount(int groupPosition) {
-        return this.listDataChild.get(this.listDataHeader.get(groupPosition)).size();
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-    @Override
-    public Recruiter getGroup(int groupPosition) {
-        return this.listDataHeader.get(groupPosition);
-    }
-
-    @Override
-    public Job getChild(int groupPosition, int childPosition) {
-        return this.listDataChild.get(this.listDataHeader.get(groupPosition)).get(childPosition);
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        Recruiter recruiter = (Recruiter)  getGroup(groupPosition);
-        String headerTitle = recruiter.getName();
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.layout_recruiter, null);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            jobSeekerId = extras.getInt("jobseekerid");
         }
 
-        TextView lbListHeader = convertView.findViewById(R.id.lbListHeader);
-        lbListHeader.setTypeface(null, Typeface.BOLD);
-        lbListHeader.setText(headerTitle);
+        /**
+         * Digunakan untuk mendapakan list job yang ada
+         */
+        expListView = (ExpandableListView) findViewById(R.id.lvExp);
+        refreshList();
 
-        return convertView;
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Intent intent = new Intent(MainActivity.this, ApplyJobActivity.class);
+                int jobId = childMapping.get(listRecruiter.get(groupPosition)).get(childPosition).getId();
+                String jobName = childMapping.get(listRecruiter.get(groupPosition)).get(childPosition).getName();
+                String jobCategory = childMapping.get(listRecruiter.get(groupPosition)).get(childPosition).getCategory();
+                int jobFee = childMapping.get(listRecruiter.get(groupPosition)).get(childPosition).getFee();
+
+                intent.putExtra("job_id", jobId);
+                intent.putExtra("job_name", jobName);
+                intent.putExtra("job_category", jobCategory);
+                intent.putExtra("job_fee", jobFee);
+                intent.putExtra("jobseekerId", jobSeekerId);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Job job = (Job) getChild(groupPosition, childPosition);
-        String childText = job.getName();
-        if(convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.layout_job, null);
-        }
+    /**
+     * Untuk mendapatkan Json object
+     */
+    protected void refreshList(){
+        Response.Listener<String> responseListener = response -> {
+            try {
+                JSONArray jsonResponse = new JSONArray(response);
+                if (jsonResponse != null) {
+                    for (int i = 0; i < jsonResponse.length(); i++){
+                        JSONObject job = jsonResponse.getJSONObject(i);
+                        JSONObject recruiter = job.getJSONObject("recruiter");
+                        JSONObject location = recruiter.getJSONObject("location");
 
-        TextView txtListChild = convertView.findViewById(R.id.lbListItem);
-        txtListChild.setText(childText);
+                        String city = location.getString("city");
+                        String province = location.getString("province");
+                        String description = location.getString("description");
 
-        return convertView;
-    }
+                        Location location1 = new Location(province, city, description);
 
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+                        int recruiterId = recruiter.getInt("id");
+                        String recruiterName = recruiter.getString("name");
+                        String recruiterEmail = recruiter.getString("email");
+                        String recruiterPhoneNumber = recruiter.getString("phoneNumber");
+
+                        Recruiter newRecruiter = new Recruiter(recruiterId, recruiterName, recruiterEmail, recruiterPhoneNumber, location1);
+                        if (listRecruiter.size() > 0) {
+                            boolean success = true;
+                            for (Recruiter rec : listRecruiter)
+                                if (rec.getId() == newRecruiter.getId())
+                                    success = false;
+                            if (success) {
+                                listRecruiter.add(newRecruiter);
+                            }
+                        } else {
+                            listRecruiter.add(newRecruiter);
+                        }
+
+                        int jobId = job.getInt("id");
+                        int jobFee = job.getInt("fee");
+                        String jobName = job.getString("name");
+                        String jobCategory = job.getString("category");
+
+                        Job newJob = new Job(jobId, jobName, newRecruiter, jobFee, jobCategory);
+                        jobIdList.add(newJob);
+
+                        for (Recruiter rec : listRecruiter) {
+                            ArrayList<Job> temp = new ArrayList<>();
+                            for (Job job2 : jobIdList) {
+                                if (job2.getRecruiter().getId() == rec.getId()) {
+                                    temp.add(job2);
+                                }
+                            }
+                            childMapping.put(rec, temp);
+                        }
+                    }
+                    listAdapter = new MainListAdapter(MainActivity.this, listRecruiter, childMapping);
+                    expListView.setAdapter(listAdapter);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        };
+
+        /**
+         * Untuk tombol applied job
+         */
+        MenuRequest menuRequest = new MenuRequest(responseListener);
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+        queue.add(menuRequest);
+        Button btnAppliedJob = findViewById(R.id.btnAppliedJob);
+        btnAppliedJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SelesaiJobActivity.class);
+                intent.putExtra("jobseekerid", jobSeekerId);
+                startActivity(intent);
+            }
+        });
     }
 }

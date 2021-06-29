@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <androidx.constraintlayout.widget.ConstraintLayout tools:context=".ApplyJobActivity" android:layout_height="match_parent" android:layout_width="match_parent" xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <androidx.cardview.widget.CardView android:layout_height="700dp" android:layout_width="385dp" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent" app:cardCornerRadius="15dp" android:elevation="100dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_height="match_parent" android:layout_width="match_parent" android:layout_margin="15dp">
+
+        <TextView
+            android:id="@+id/pesanan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Apply Job"
+            android:textColor="@color/black"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.014"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintStart_toStartOf="parent" android:textSize="12sp" android:textColor="@color/black" android:text="Job Name" android:id="@+id/staticJobName" app:layout_constraintTop_toBottomOf="@id/pesanan" android:layout_marginTop="15dp"/>
+
+    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintEnd_toEndOf="parent" android:textSize="12sp" android:textColor="@color/black" android:text="TextView" android:id="@+id/job_name" app:layout_constraintTop_toBottomOf="@id/pesanan" android:layout_marginTop="15dp"/>
+
+    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintStart_toStartOf="parent" android:textSize="12sp" android:textColor="@color/black" android:text="Job Category" android:id="@+id/staticCategory" app:layout_constraintTop_toBottomOf="@id/staticJobName" android:layout_marginTop="10dp"/>
+
+    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintEnd_toEndOf="parent" android:textSize="12sp" android:textColor="@color/black" android:text="TextView" android:id="@+id/job_category" app:layout_constraintTop_toBottomOf="@id/job_name" android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/job_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/job_category" />
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintStart_toStartOf="parent" android:textSize="12sp" android:textColor="@color/black" android:text="Job Fee" android:id="@+id/staticFee" app:layout_constraintTop_toBottomOf="@id/staticCategory" android:layout_marginTop="10dp"/>
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintStart_toStartOf="parent" android:textSize="12sp" android:textColor="@color/black" android:text="Payment Method" android:id="@+id/staticPayMethod" app:layout_constraintTop_toBottomOf="@id/staticFee" android:layout_marginTop="10dp"/>
+
+
+    -<RadioGroup android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintStart_toStartOf="parent" android:id="@+id/radioGroup" app:layout_constraintTop_toBottomOf="@id/staticPayMethod" android:layout_marginTop="10dp">
+
+    <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:textSize="12sp" android:textColor="@color/black" android:text="E-wallet" android:id="@+id/ewallet" android:minHeight="20dp"/>
+
+    <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:textSize="12sp" android:textColor="@color/black" android:text="Bank" android:id="@+id/bank" android:minHeight="20dp"/>
+
+</RadioGroup>
+
+    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintStart_toStartOf="parent" android:textSize="12sp" android:textColor="@color/black" android:text="Referral Code" android:id="@+id/textCode" app:layout_constraintTop_toBottomOf="@id/radioGroup" android:layout_marginTop="10dp"/>
+
+    <EditText android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintEnd_toEndOf="parent" android:textSize="12sp" android:textColor="@color/black" android:id="@+id/referral_code" app:layout_constraintTop_toBottomOf="@id/radioGroup" android:layout_marginTop="10dp" android:hint="EditText"/>
+
+        <TextView
+            android:id="@+id/total_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textCode" />
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintStart_toStartOf="parent" android:textSize="12sp" android:textColor="@color/black" android:text="Total Fee" android:id="@+id/staticTotalFee" app:layout_constraintTop_toBottomOf="@id/textCode" android:layout_marginTop="30dp"/>
+
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="76dp"
+            android:backgroundTint="#808080"
+            android:text="Apply Now"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/staticTotalFee" />
+
+        <Button android:layout_height="wrap_content" android:layout_width="350dp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:textColor="@color/black" android:text="Count" android:id="@+id/btnCount" app:layout_constraintTop_toBottomOf="@id/staticTotalFee" android:layout_marginTop="20dp" tools:layout_editor_absoluteY="246dp" android:backgroundTint="#808080" android:layout_gravity="center"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

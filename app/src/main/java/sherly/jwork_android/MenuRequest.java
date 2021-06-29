@@ -7,23 +7,32 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-    public class MenuRequest extends StringRequest {
+/**
+ * Class MenuRequest, untuk membuat menu yang dipanggil dari activity
+ * @author Sherly
+ * @version 28-06-2021
+ */
 
-        private static final String URL = "http://10.0.2.2:8080/job";
-        private Map<String, String> params;
+public class MenuRequest extends StringRequest {
 
-        public MenuRequest(Job job, Response.Listener<String> listener){
-            super(Method.GET, URL, listener, null);
-            params = new HashMap<>();
-            params.put("id", String.valueOf(job.getId()));
-            params.put("name", job.getName());
-            params.put("recruiter", String.valueOf(job.getRecruiter()));
-            params.put("fee", String.valueOf(job.getFee()));
-            params.put("category", job.getCategory());
-        }
+    private static final String URL = "http://10.0.2.2:8080/job";
+    private Map<String, String> params;
 
-        @Override
-        protected Map<String, String> getParams() throws AuthFailureError {
-            return params;
-        }
+    /**
+     * Menu request yang diminta pada MainActivity
+     * @param listener response yang dilakukan dari objek pada view
+     */
+    public MenuRequest(Response.Listener<String> listener){
+        super(Method.GET, URL, listener, null);
     }
+
+    /**
+     * Mengembalikan parameter Map dari POST yang digunakan untuk request job
+     * @return parameter request yang ada
+     * @throws AuthFailureError jika ada kesalahan autentikasi
+     */
+    @Override
+    protected Map<String, String> getParams() throws AuthFailureError {
+        return null;
+    }
+}

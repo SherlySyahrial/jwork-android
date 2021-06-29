@@ -2,4 +2,5 @@
 <resources>
     <item name="lbListHeader" type="id" />
     <item name="lbListItem" type="id" />
+    <item name="btn_Login" type="id" />
 </resources>
