@@ -4,9 +4,9 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  * Class ApplyJobRequest, digunakan untuk melakukan request dalam bentuk url, sesuai dengan pilihan pembayaran
  * @author Sherly
@@ -17,13 +17,13 @@ public class ApplyJobRequest extends StringRequest {
     private Map<String, String> params;
     private static final String URL_BANK = "http://10.0.2.2:8080/invoice/createBankPayment";
     private static final String URL_WALLET = "http://10.0.2.2:8080/invoice/createEWalletPayment";
-
     /**
      * Jika memilih pilihan bank
      * @param jobIdList
      * @param jobseekerId
      * @param listener
      */
+
     public ApplyJobRequest(String jobIdList, String jobseekerId, Response.Listener<String> listener) {
         super(Method.POST, URL_BANK, listener, null);
         params = new HashMap<>();

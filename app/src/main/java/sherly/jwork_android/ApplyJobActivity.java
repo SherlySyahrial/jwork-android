@@ -2,7 +2,6 @@ package sherly.jwork_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +33,7 @@ public class ApplyJobActivity extends AppCompatActivity {
     private String jobCategory;
     private double jobFee;
 
-    //ApplyJobRequest request;
+    ApplyJobRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +52,15 @@ public class ApplyJobActivity extends AppCompatActivity {
         /**
          * Finalisasi komponen yang ada sesuai dengan activity_apply_job.xml
          */
-        final EditText etRefCode = findViewById(R.id.referral_code);
-        final TextView tvRefCode = findViewById(R.id.textCode);
-        final TextView tvJobName = findViewById(R.id.job_name);
-        final TextView tvJobCategory = findViewById(R.id.job_category);
-        final TextView tvJobFee = findViewById(R.id.job_fee);
-        final TextView tvTotalFee = findViewById(R.id.total_fee);
-        final RadioGroup radioGroup = findViewById(R.id.radioGroup);
-        final Button btnCount = findViewById(R.id.btnCount);
-        final Button btnApply = findViewById(R.id.btnApply);
+        EditText etRefCode = findViewById(R.id.referral_code);
+        TextView tvRefCode = findViewById(R.id.textCode);
+        TextView tvJobName = findViewById(R.id.job_name);
+        TextView tvJobCategory = findViewById(R.id.job_category);
+        TextView tvJobFee = findViewById(R.id.job_fee);
+        TextView tvTotalFee = findViewById(R.id.total_fee);
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        Button btnCount = findViewById(R.id.btnCount);
+        Button btnApply = findViewById(R.id.btnApply);
 
         btnApply.setVisibility(View.INVISIBLE);
         tvRefCode.setVisibility(View.INVISIBLE);
@@ -77,12 +75,9 @@ public class ApplyJobActivity extends AppCompatActivity {
          * Digunakan saat memilih plihan pembayaran
          */
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // checkedId adalah RadioButton yang dipilih
+                // checkedId is the RadioButton selected
                 RadioButton rb = findViewById(checkedId);
-                btnCount.setEnabled(true);
-                btnApply.setVisibility(View.INVISIBLE);
                 switch (checkedId) {
                     case R.id.ewallet:
                         tvRefCode.setVisibility(View.VISIBLE);
@@ -106,7 +101,7 @@ public class ApplyJobActivity extends AppCompatActivity {
                 int checkedId = radioGroup.getCheckedRadioButtonId();
                 switch (checkedId) {
                     case R.id.ewallet:
-                        final String refCode = etRefCode.getText().toString();
+                        String refCode = etRefCode.getText().toString();
                         Response.Listener<String> bonusResponse = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -137,6 +132,7 @@ public class ApplyJobActivity extends AppCompatActivity {
                                         tvTotalFee.setText("Rp. " + jobFee);
                                     }
                                 }
+
                             }
                         };
                         BonusRequest bonusRequest = new BonusRequest(refCode, bonusResponse);
