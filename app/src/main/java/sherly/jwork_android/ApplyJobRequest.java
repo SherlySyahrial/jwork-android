@@ -29,7 +29,7 @@ public class ApplyJobRequest extends StringRequest {
         params = new HashMap<>();
         params.put("jobIdList", jobIdList);
         params.put("jobseekerId", jobseekerId);
-        params.put("adminFee", "2500");
+        params.put("adminFee", "0");
     }
 
     /**
